@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import styles from './post.module.css';
-
 type BlogPost = {
   id: number;
   title: string;
+  imagesPlacement?: string | null;
   excerpt: string;
   content: string;
   slug?: string;
@@ -69,11 +69,28 @@ export default function PostPage() {
   if (loading) return <div className={styles.loading}>Loading post...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
   if (!post) return <div className={styles.error}>Post not found</div>;
-
   return (
     <main className={styles.container}>
       <article className={styles.card}>
         <h1 className={styles.title}>{post.title}</h1>
+        {/* Resolve image path: use external URL or proxy images placed in the `post` package */}
+        {(() => {
+          const ip = post.imagesPlacement || '';
+          let src = '';
+          if (!ip) {
+            src = '/placeholder.png';
+          } else if (/^https?:\/\//i.test(ip) || ip.startsWith('/')) {
+            src = ip;
+          } else if (ip.startsWith('images/')) {
+            // strip leading 'images/' and proxy to our API
+            src = `/api/post-image/${ip.replace(/^images\//, '')}`;
+          } else {
+            // fallback: treat value as filename and proxy
+            src = `/api/post-image/${ip}`;
+          }
+
+          return <img src={src} alt={post.title} className={styles.image} />;
+        })()}
         <div className={styles.meta}>📅 {post.publishDate ? new Date(post.publishDate).toLocaleString() : 'N/A'}</div>
         <div className={styles.content} dangerouslySetInnerHTML={{ __html: post.content }} />
       </article>
