@@ -1,6 +1,7 @@
 // src/app/layout.tsx
 import React from 'react';
 import Link from 'next/link';
+import NewsScript from '../components/NewsScript';
 import './globals.css'; // Global styles for your app
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="author" content="YOUTUBE AMRENDRA" />
         <meta name="author" content="social news" />
         <meta name="keywords" content="news, tech, social, blog" />
+        <NewsScript />
       </head>
       <body className=''>
         <header className='sticky relative top-0 p-4 bg-gray-400'>
