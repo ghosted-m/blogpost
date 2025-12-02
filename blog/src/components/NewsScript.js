@@ -3,7 +3,6 @@ import Script from 'next/script';
 const NewsScript = () => {
   return (
     <>
-      {/* This script will be loaded only on the client-side */}
       <Script
         strategy="afterInteractive"
         src="https://news.google.com/swg/js/v1/swg-basic.js"
